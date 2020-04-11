@@ -14,39 +14,6 @@ client.connect((err) => {
 
 });
 
-const mapReduce = function(db, callback){
-    const tweetCollection = db.collection('tweets');
-    tweetCollection.find({}).toArray((err, res) => {
-        var hashtagArray = [];
-        for (var i = 0; i < res.length; i++){
-            if(res[i].entities != undefined) {
-                for (var j = 0; j < res[i].entities.hashtags.length; j++){
-                    //console.log(res[i].entities.hashtags[j].text)
-                    hashtagArray.push(res[i].entities.hashtags[j].text);
-                }
-            }
-
-        }
-        var dict = new Object();
-        for ( var i = 0; i < hashtagArray.length; i++){
-            if(dict.hasOwnProperty(hashtagArray[i])){
-                dict[hashtagArray[i]] += 1;
-            }else{
-                dict[hashtagArray[i]] = 1;
-            }
-        }
-
-        var arr = [];
-        for (var p in dict) {
-            arr.push({hashtag: p, count: dict[p]});
-        }
-        arr.sort(function(a,b){return b.count - a.count});
-        console.log(arr.slice(0,10));
-        callback(arr);
-    });
-}
-
-
 var mapFunc = function(){
     if(this.entities != undefined){
         for (i = 0; i < this.entities.hashtags.length; i++){
@@ -65,22 +32,25 @@ var reduceFunction = function(ht,values){
 }
 
 
-const mapReduce1 = function(db, callback){
+const mapReduce1 = async function(db, callback){
     //const tweetCollection = db.collection('tweets');
     // map reduce ( map, reduce , query, output)
-    db.collection('tweets').mapReduce(
+    let myCollection = await db.collection('tweets').mapReduce(
         mapFunc,
         reduceFunction,
         { 
-          out: "hashtag_results",
-          sort: {value: -1},
-          limit: 10
+          //Writing collection to DB with specified name
+          out: {replace: "hashtag_results"}
+
+          //In memory collection
+          //out: {inline: 1 },
         }
     )
+    //Get data from DB and sort and find top 10
+    console.log(await db.collection('hashtag_results').find());
 
-    callback([]);
+    //Finding top 10 from the in memory collection
+    //console.log(await myCollection.sort((a,b) => b.value - a.value).slice(0,10));
+
+    callback();
 }
-
-
-
-
