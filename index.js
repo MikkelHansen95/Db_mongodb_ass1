@@ -1,16 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-
-//conn URL
 const url = 'mongodb://localhost:27017';
-
-//DB Name
 const dbName = 'testdb';
-
 const client = new MongoClient(url);
-
-//connect
-
 
 client.connect((err) => {
     assert.equal(null, err);
