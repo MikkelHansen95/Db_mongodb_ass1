@@ -1,6 +1,8 @@
 # Database Assignment MongoDB
 
-## Provide implementation of map and reduce function
+Provide implementation of map and reduce function
+======
+    The **map** Function for the mapReduce
     var mapFunc = function () {
     if (this.entities != undefined) {
         for (i = 0; i < this.entities.hashtags.length; i++) {
@@ -10,6 +12,7 @@
     }
     }
 
+    The reduce Function for the mapReduce
     var reduceFunction = function (ht, values) {
     count = 0;
     for (let i = 0; i < values.length; i++) {
@@ -17,7 +20,19 @@
     }
     return count;
     }
+    The top 10 query for the mapReduce
+    var topTen = function (db, callback) {
+    const collection = db.collection("hashtag_results");
+    collection.find({}).toArray(function(err,docs) {
+        assert.equal(err, null);
+        console.log("Found the following records, sorted them and took top 10");
+        docs.sort( (a,b) => b.value - a.value);
+        console.log(docs.slice(0,10));
+        callback(docs);
+    });
+    }
 
+    The map reduce function.
     const mapReduce1 = async function (db, callback) {
 
     let collection = await db.collection('tweets');
@@ -37,8 +52,8 @@
     }
 
 
-##  Provide execution command for running MapReduce
-
+Provide execution command for running MapReduce
+======
     const MongoClient = require('mongodb').MongoClient;
     const assert = require('assert');
     const url = 'mongodb://localhost:27017';
@@ -57,7 +72,8 @@
 
 
 
-## Provide top 10 recorded out of the sorted result
+Provide top 10 recorded out of the sorted result
+======
     Found the following records, sorted them and took top 10
     [ 
     { _id: 'FCBLive', value: 27 },
