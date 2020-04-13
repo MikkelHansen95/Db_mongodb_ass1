@@ -37,7 +37,7 @@
     }
 
 
-## b) Provide execution command for running MapReduce
+##  Provide execution command for running MapReduce
 
     const MongoClient = require('mongodb').MongoClient;
     const assert = require('assert');
@@ -57,7 +57,7 @@
 
 
 
-## c) Provide top 10 recorded out of the sorted result
+## Provide top 10 recorded out of the sorted result
     Found the following records, sorted them and took top 10
     [ 
     { _id: 'FCBLive', value: 27 },
